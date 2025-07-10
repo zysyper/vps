@@ -47,7 +47,7 @@ class KategoriResource extends Resource
                             ]),
                         Forms\Components\FileUpload::make('image')
                             ->image()
-                            ->disk('public')
+                            ->disk(config('filesystems.default'))
                             ->directory('kategoris')
                             ->required(),
                         Forms\Components\Toggle::make('is_active')

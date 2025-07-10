@@ -49,133 +49,133 @@ class OrderResource extends Resource
                 Group::make()->schema([
                     Section::make('order informasi')->schema([
                         Select::make('user_id')
-                        ->label('Customer')
-                        ->relationship('user', 'name')
-                        ->searchable()
-                        ->preload()
-                        ->required(),
+                            ->label('Customer')
+                            ->relationship('user', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->required(),
 
                         Select::make('payment_method')
-                        ->label('jenis pembayaran')
-                        ->options([
-                            'qris' => 'Qris',
-                            'cod' => 'Ambil Sendiri'
-                        ])
-                        ->required(),
+                            ->label('jenis pembayaran')
+                            ->options([
+                                'qris' => 'Qris',
+                                'cod' => 'Ambil Sendiri'
+                            ])
+                            ->required(),
 
                         Select::make('payment_status')
-                        ->label('Informasi Pembayaran')
-                        ->options([
-                            'pending' => 'Pending',
-                            'paid' => 'Paid',
-                            'failed' => 'Failed'
-                        ])
-                        ->default('pending')
-                        ->required(),
+                            ->label('Informasi Pembayaran')
+                            ->options([
+                                'pending' => 'Pending',
+                                'paid' => 'Paid',
+                                'failed' => 'Failed'
+                            ])
+                            ->default('pending')
+                            ->required(),
 
                         TextInput::make('phone')
                             ->required()
                             ->maxLength(255),
 
                         ToggleButtons::make('status')
-                        ->inline()
-                        ->options([
-                            'new' => 'Baru',
-                            'processing' => 'Proses',
-                            'shipped' => "Dalam Perjalanan",
-                            'delivered' => 'Diterima',
-                            'canceled' => 'Batal'
-                        ])
-                        ->required()
-                        ->default('new')
-                        ->colors([
-                            'new' => 'info',
-                            'processing' => 'warning',
-                            'shipped' => "info",
-                            'delivered' => 'success',
-                            'canceled' => 'danger'
-                        ]),
+                            ->inline()
+                            ->options([
+                                'new' => 'Baru',
+                                'processing' => 'Proses',
+                                'shipped' => "Dalam Perjalanan",
+                                'delivered' => 'Diterima',
+                                'canceled' => 'Batal'
+                            ])
+                            ->required()
+                            ->default('new')
+                            ->colors([
+                                'new' => 'info',
+                                'processing' => 'warning',
+                                'shipped' => "info",
+                                'delivered' => 'success',
+                                'canceled' => 'danger'
+                            ]),
 
                         FileUpload::make('file_path')
-                        ->disk('public')
-                        ->directory('uploads/dokumen')
-                        ->preserveFilenames()
-                        ->downloadable()
-                        ->previewable(false)
-                        ->openable(),
+                            ->disk('public')
+                            ->directory('uploads/dokumen')
+                            ->preserveFilenames()
+                            ->downloadable()
+                            ->previewable(false)
+                            ->openable(),
 
                         Textarea::make('notes'),
                         Textarea::make('catatan')
                     ])->columnSpanFull(),
                     Section::make('Order Item')->schema([
                         Repeater::make('items')
-                        ->relationship()
-                        ->schema([
-                            Select::make('produk_id')
-                            ->relationship('produk','name')
-                            ->searchable()
-                            ->preload()
-                            ->required()
-                            ->distinct()
-                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, Set $set) {
-                                if ($state) {
-                                    $product = produk::find($state);
-                                    $price = $product ? $product->harga : 0;
-                                    $set('unit_amount', $price);
-                                    $set('total_amount', $price);
-                                }
-                            }),
+                            ->relationship()
+                            ->schema([
+                                Select::make('produk_id')
+                                    ->relationship('produk', 'name')
+                                    ->searchable()
+                                    ->preload()
+                                    ->required()
+                                    ->distinct()
+                                    ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, Set $set) {
+                                        if ($state) {
+                                            $product = produk::find($state);
+                                            $price = $product ? $product->harga : 0;
+                                            $set('unit_amount', $price);
+                                            $set('total_amount', $price);
+                                        }
+                                    }),
 
-                            TextInput::make('quantity')
-                            ->numeric()
-                            ->required()
-                            ->default(1)
-                            ->minValue(1)
-                            ->reactive()
-                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                $unitAmount = floatval($get('unit_amount')) ?: 0;
-                                $quantity = floatval($state) ?: 1;
-                                $set('total_amount', $unitAmount * $quantity);
-                            }),
+                                TextInput::make('quantity')
+                                    ->numeric()
+                                    ->required()
+                                    ->default(1)
+                                    ->minValue(1)
+                                    ->reactive()
+                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                        $unitAmount = floatval($get('unit_amount')) ?: 0;
+                                        $quantity = floatval($state) ?: 1;
+                                        $set('total_amount', $unitAmount * $quantity);
+                                    }),
 
-                            TextInput::make('unit_amount')
-                            ->label('Harga Satuan')
-                            ->disabled()
-                            ->dehydrated()
-                            ->numeric()
-                            ->required()
-                            ->formatStateUsing(fn ($state) => $state ? round($state, 2) : 0)
-                            ->afterStateUpdated(function ($state, Set $set, Get $get) {
-                                $unitAmount = floatval($state) ?: 0;
-                                $quantity = floatval($get('quantity')) ?: 1;
-                                $set('total_amount', $unitAmount * $quantity);
-                            }),
+                                TextInput::make('unit_amount')
+                                    ->label('Harga Satuan')
+                                    ->disabled()
+                                    ->dehydrated()
+                                    ->numeric()
+                                    ->required()
+                                    ->formatStateUsing(fn($state) => $state ? round($state, 2) : 0)
+                                    ->afterStateUpdated(function ($state, Set $set, Get $get) {
+                                        $unitAmount = floatval($state) ?: 0;
+                                        $quantity = floatval($get('quantity')) ?: 1;
+                                        $set('total_amount', $unitAmount * $quantity);
+                                    }),
 
-                            TextInput::make('total_amount')
-                            ->label('Total')
-                            ->disabled()
-                            ->dehydrated()
-                            ->numeric()
-                            ->required()
-                            ->formatStateUsing(fn ($state) => $state ? round($state, 2) : 0),
-                        ])->columns(4),
+                                TextInput::make('total_amount')
+                                    ->label('Total')
+                                    ->disabled()
+                                    ->dehydrated()
+                                    ->numeric()
+                                    ->required()
+                                    ->formatStateUsing(fn($state) => $state ? round($state, 2) : 0),
+                            ])->columns(4),
                         Placeholder::make('grand_total_placeholder')
-                        ->label('Total Harga')
-                        ->content(function(Get $get, Set $set) {
-                            $total = 0;
-                            if (!$repeaters = $get('items')){
-                                return $total;
-                            }
+                            ->label('Total Harga')
+                            ->content(function (Get $get, Set $set) {
+                                $total = 0;
+                                if (!$repeaters = $get('items')) {
+                                    return $total;
+                                }
 
-                            foreach ($repeaters as $key => $repeater){
-                                $total += floatval($get("items.$key.total_amount") ?: 0);
-                            }
-                            $set('grand_total', $total);
+                                foreach ($repeaters as $key => $repeater) {
+                                    $total += floatval($get("items.$key.total_amount") ?: 0);
+                                }
+                                $set('grand_total', $total);
 
-                            return Number::currency($total, 'IDR');
-                        }),
+                                return Number::currency($total, 'IDR');
+                            }),
                     ]),
                     Hidden::make('grand_total')
                         ->default(0)
@@ -186,48 +186,55 @@ class OrderResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(
+                Order::query()->latest()->limit(5)
+            )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
-                ->label('Order ID')
-                ->sortable()
-                ->searchable(),
+                    ->label('Order ID')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('user.name')
-                ->label('Customer')
-                ->sortable()
-                ->searchable(),
-             Tables\Columns\TextColumn::make('grand_total')
-                ->label('Total')
-                ->money('IDR')
-                ->sortable(),
-            Tables\Columns\TextColumn::make('payment_method')
-                ->label('Metode Pembayaran')
-                ->sortable(),
-            Tables\Columns\SelectColumn::make('payment_status')
-                ->label('Status Pembayaran')
-                ->options([
-                            'pending' => 'Pending',
-                            'paid' => 'Paid',
-                            'failed' => 'Failed'
-                        ]),
-            Tables\Columns\SelectColumn::make('status')
-                ->label('Status Order')
-                ->options([
-                    'new' => 'Baru',
-                    'processing' => 'Proses',
-                    'shinpped' => "Dalam Perjalanan",
-                    'delivered' => 'Diterima',
-                    'canceled' => 'Batal'
-                ])
-                ->sortable(),
+                    ->label('Akun Customer')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('notes')
+                    ->label('Customer')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('grand_total')
+                    ->label('Total')
+                    ->money('IDR')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('payment_method')
+                    ->label('Metode Pembayaran')
+                    ->sortable(),
+                Tables\Columns\SelectColumn::make('payment_status')
+                    ->label('Status Pembayaran')
+                    ->options([
+                        'pending' => 'Pending',
+                        'paid' => 'Paid',
+                        'failed' => 'Failed'
+                    ]),
+                Tables\Columns\SelectColumn::make('status')
+                    ->label('Status Order')
+                    ->options([
+                        'new' => 'Baru',
+                        'processing' => 'Proses',
+                        'shinpped' => "Dalam Perjalanan",
+                        'delivered' => 'Diterima',
+                        'canceled' => 'Batal'
+                    ])
+                    ->sortable(),
                 TextColumn::make('file_path')
-                ->label('Download')
-                ->url(fn ($record) => Storage::disk('public')->url($record->file_path))
-                ->openUrlInNewTab()
-                ->formatStateUsing(fn () => 'Unduh File'),
-            Tables\Columns\TextColumn::make('created_at')
-                ->label('Order Date')
-                ->dateTime()
-                ->sortable(),
+                    ->label('Download')
+                    ->url(fn($record) => Storage::disk('public')->url($record->file_path))
+                    ->openUrlInNewTab()
+                    ->formatStateUsing(fn() => 'Unduh File'),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Order Date')
+                    ->dateTime()
+                    ->sortable(),
             ])
             ->filters([
                 //
@@ -248,9 +255,7 @@ class OrderResource extends Resource
 
     public static function getRelations(): array
     {
-        return [
-
-        ];
+        return [];
     }
 
     public static function getPages(): array

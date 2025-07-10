@@ -43,7 +43,7 @@ class ProdukPage extends Component
         'search' => ['except' => ''],
     ];
 
-     public function addToCart($product_id)
+    public function addToCart($product_id)
     {
         $this->loadingCart[$product_id] = true;
 
@@ -72,11 +72,6 @@ class ProdukPage extends Component
         $this->loadingCart[$product_id] = false;
     }
 
-    /**
-     * Reset all filters to default values
-     *
-     * @return void
-     */
     public function resetFilters()
     {
         $this->categories = [];
@@ -89,12 +84,6 @@ class ProdukPage extends Component
         $this->resetPage();
     }
 
-    /**
-     * Reset page when filters are updated
-     *
-     * @param string $property
-     * @return void
-     */
     public function updated($property)
     {
         if (in_array($property, ['search', 'categories', 'inStock', 'onSale', 'featured', 'maxPrice', 'sortBy', 'perPage'])) {
@@ -102,21 +91,11 @@ class ProdukPage extends Component
         }
     }
 
-    /**
-     * Toggle mobile filters visibility
-     *
-     * @return void
-     */
     public function toggleFilters()
     {
         $this->showFilters = !$this->showFilters;
     }
 
-    /**
-     * Render the component
-     *
-     * @return \Illuminate\View\View
-     */
     public function render()
     {
         $produkQuery = produk::query()->where('is_active', 1);

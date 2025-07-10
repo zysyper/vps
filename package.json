@@ -4,9 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "php artisan serve --host=0.0.0.0 --port=8000",
-    "tunnel": "lt --port 8000 --subdomain lestariadv",
-    "tai": "lt --port 5173 --subdomain lestariadv-vite"
+    "serve": "php artisan serve"
   },
   "devDependencies": {
     "autoprefixer": "^10.4.21",

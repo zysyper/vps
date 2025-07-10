@@ -8,6 +8,7 @@ use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
@@ -71,7 +72,7 @@ class CheckoutController extends Controller
         $order->payment_status = 'pending';
         $order->status = 'new';
         $order->currency = 'IDR';
-        $order->notes = $request->first_name .' '. $request->last_name;
+        $order->notes = $request->first_name . ' ' . $request->last_name;
         $order->catatan = $request->catatan ?? '';
         $order->phone = $request->phone;
 
@@ -95,7 +96,7 @@ class CheckoutController extends Controller
 
         // Redirect ke halaman sukses dengan order ID
         return redirect()->route('checkout.success', ['order' => $order->id])
-                        ->with('success', 'Pesanan berhasil dibuat!');
+            ->with('success', 'Pesanan berhasil dibuat!');
     }
 
     /**
@@ -103,24 +104,57 @@ class CheckoutController extends Controller
      */
     public function success($orderId = null)
     {
+
+
+        $webhookUrl = env('DISCORD_WEBHOOK_URL');
+
+        if (!$webhookUrl) {
+            return;
+        }
+
+        Http::timeout(30)->post($webhookUrl, [
+            'content' => 'Test dari Laravel Job! 🎯',
+            'embeds' => [[
+                'title' => '📦 Order Masuk!',
+                'description' => 'Pesanan dari **John Doe** senilai **Rp 150.000**',
+                'color' => 65280,
+                'fields' => [
+                    [
+                        'name' => 'Produk',
+                        'value' => 'Kaos Polos',
+                        'inline' => true
+                    ],
+                    [
+                        'name' => 'Jumlah',
+                        'value' => '2 pcs',
+                        'inline' => true
+                    ]
+                ],
+                'footer' => [
+                    'text' => 'Laravel Store'
+                ],
+                'timestamp' => now()->toIso8601String()
+            ]]
+        ]);
+
         // Jika order ID tidak diberikan, ambil order terbaru dari user
         if ($orderId) {
             $order = Order::where('user_id', Auth::id())
-                         ->where('id', $orderId)
-                         ->first();
+                ->where('id', $orderId)
+                ->first();
         } else {
             $order = Order::where('user_id', Auth::id())
-                         ->latest()
-                         ->first();
+                ->latest()
+                ->first();
         }
 
         // Get user details
-                $user = User::find(Auth::id());
+        $user = User::find(Auth::id());
 
         // Jika tidak ada order, redirect ke home
         if (!$order) {
             return redirect()->route('home')
-                           ->with('error', 'Order tidak ditemukan.');
+                ->with('error', 'Order tidak ditemukan.');
         }
 
 
@@ -130,5 +164,4 @@ class CheckoutController extends Controller
             'user' => $user,
         ]);
     }
-
 }

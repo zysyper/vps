@@ -5,8 +5,10 @@ namespace App\Filament\Widgets;
 use App\Filament\Resources\OrderResource;
 use App\Models\Order;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Number;
 
 class RecentOrdersWidget extends BaseWidget
@@ -19,7 +21,7 @@ class RecentOrdersWidget extends BaseWidget
     {
         return $table
             ->query(
-                Order::query()->latest()->limit(10)
+                Order::query()->latest()->limit(5)
             )
             ->columns([
                 Tables\Columns\TextColumn::make('id')
@@ -27,14 +29,14 @@ class RecentOrdersWidget extends BaseWidget
                     ->badge()
                     ->color('primary'),
 
-                Tables\Columns\TextColumn::make('user.name')
+                Tables\Columns\TextColumn::make('notes')
                     ->label('Customer')
                     ->searchable()
                     ->sortable(),
 
                 Tables\Columns\TextColumn::make('grand_total')
                     ->label('Total')
-                    ->formatStateUsing(fn ($state) => Number::currency($state, 'IDR'))
+                    ->formatStateUsing(fn($state) => Number::currency($state, 'IDR'))
                     ->sortable(),
 
                 Tables\Columns\BadgeColumn::make('payment_method')
@@ -47,20 +49,26 @@ class RecentOrdersWidget extends BaseWidget
                 Tables\Columns\SelectColumn::make('payment_status')
                     ->label('Status Bayar')
                     ->options([
-                            'pending' => 'Pending',
-                            'paid' => 'Paid',
-                            'failed' => 'Failed'
-                        ]),
+                        'pending' => 'Pending',
+                        'paid' => 'Paid',
+                        'failed' => 'Failed'
+                    ]),
 
                 Tables\Columns\SelectColumn::make('status')
                     ->label('Status Order')
                     ->options([
-                    'new' => 'Baru',
-                    'processing' => 'Proses',
-                    'shinpped' => "Dalam Perjalanan",
-                    'delivered' => 'Diterima',
-                    'canceled' => 'Batal'
-                ]),
+                        'new' => 'Baru',
+                        'processing' => 'Proses',
+                        'shinpped' => "Dalam Perjalanan",
+                        'delivered' => 'Diterima',
+                        'canceled' => 'Batal'
+                    ]),
+
+                TextColumn::make('file_path')
+                    ->label('Download')
+                    ->url(fn($record) => Storage::disk('public')->url($record->file_path))
+                    ->openUrlInNewTab()
+                    ->formatStateUsing(fn() => 'Unduh File'),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
@@ -71,7 +79,7 @@ class RecentOrdersWidget extends BaseWidget
                 Tables\Actions\Action::make('view')
                     ->label('Lihat')
                     ->icon('heroicon-m-eye')
-                    ->url(fn (Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
+                    ->url(fn(Order $record): string => OrderResource::getUrl('view', ['record' => $record]))
                     ->openUrlInNewTab(),
             ])
             ->heading('Pesanan Terbaru')

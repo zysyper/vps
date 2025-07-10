@@ -114,7 +114,7 @@
                                 </div>
                                 <p class="inline-block p-3 mt-4 text-sm text-gray-600 border border-yellow-100 rounded-md bg-yellow-50">
                                     <span class="font-semibold">Petunjuk:</span> Kirim bukti Pembayaran Ke Nomer Whatsapp ini
-                                    <a class="mt-6 font-bold text-center text-blue-600 text-1xl" href="https://wa.me/085810200320" target="_blank">085810200320</a>
+                                    <a class="mt-6 font-bold text-center text-blue-600 text-1xl" href="https://wa.me/+6285810200320" target="_blank">085810200320</a>
                                 </p>
                             </div>
                         @endif
@@ -122,7 +122,7 @@
                 </div>
 
                 <div class="space-y-4">
-                <a href="https://wa.me/085810200320" class="w-full px-6 py-3 bg-blue-500 text-white font-medium rounded-2xl hover:bg-blue-200 transition-colors duration-200 text-center block">
+                <a href="https://wa.me/+6285810200320" class="block w-full px-6 py-3 font-medium text-center text-white transition-colors duration-200 bg-blue-500 rounded-2xl hover:bg-blue-200">
                     Kirim Bukti Pembayaran
                 </a>
                 </div>

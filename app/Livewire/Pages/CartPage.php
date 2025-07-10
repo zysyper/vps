@@ -36,6 +36,7 @@ class CartPage extends Component
         $this->calculateTotals();
     }
 
+
     protected function calculateTotals()
     {
         $this->subtotal = AddToCart::calculateGrandTotal($this->cartItems);
@@ -119,6 +120,24 @@ class CartPage extends Component
         }
 
         return $imageUrl;
+    }
+
+    public function updatedCartItems($value, $key)
+    {
+        // Parse the key to get array indices
+        $keys = explode('.', $key);
+
+        if (count($keys) >= 2 && $keys[1] === 'quantity') {
+            $index = $keys[0];
+            $productId = $this->cartItems[$index]['produk_id'];
+            $quantity = max(1, min(999, (int)$value));
+
+            // Update quantity and recalculate
+            $this->cartItems[$index]['quantity'] = $quantity;
+            $this->cartItems[$index]['total_amount'] = $this->cartItems[$index]['unit_amount'] * $quantity;
+
+            $this->calculateTotals();
+        }
     }
 
     public function render()

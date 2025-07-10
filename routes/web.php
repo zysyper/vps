@@ -16,6 +16,8 @@ Route::get('/products/{slug}', function ($slug) {
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/categories', [HomeController::class, 'kategori'])->name('kategori');
 
+
+
 // Products by category route
 Route::get('/products?categories[0]={kategori_id}', function() {
     return view('pages.produk');
