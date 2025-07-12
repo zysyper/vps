@@ -14,7 +14,8 @@ class ProductDetailPage extends Component
 
     public $loadingCart = [];
 
-    public function addToCart($product_id){
+    public function addToCart($product_id)
+    {
         $this->loadingCart[$product_id] = true;
 
         $product = produk::find($product_id);

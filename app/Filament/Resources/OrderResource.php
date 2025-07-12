@@ -6,7 +6,7 @@ use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Filament\Resources\OrderResource\RelationManagers\AddressRelationManager;
 use Filament\Forms\Components\Hidden;
-use App\Models\Order;
+use App\Models\order;
 use App\Models\produk;
 use Filament\Forms;
 use Filament\Forms\Components\Section;

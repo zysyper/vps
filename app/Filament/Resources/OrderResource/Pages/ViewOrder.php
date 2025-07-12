@@ -19,7 +19,7 @@ use Filament\Resources\Pages\ViewRecord;
 use Filament\Support\Enums\Alignment;
 use Filament\Support\Facades\FilamentView;
 use Illuminate\Support\Number;
-use App\Models\Order;
+use App\Models\order;
 use App\Models\produk;
 use App\Models\orderitem;
 use App\Models\User;
@@ -57,7 +57,7 @@ class ViewOrder extends ViewRecord
                             ->label('Customer'),
                         TextEntry::make('payment_method')
                             ->label('Jenis Pembayaran')
-                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                            ->formatStateUsing(fn(string $state): string => match ($state) {
                                 'qris' => 'Qris',
                                 'cod' => 'Ambil Sendiri',
                                 default => $state,
@@ -65,7 +65,7 @@ class ViewOrder extends ViewRecord
                         TextEntry::make('payment_status')
                             ->label('Informasi Pembayaran')
                             ->badge()
-                            ->color(fn (string $state): string => match ($state) {
+                            ->color(fn(string $state): string => match ($state) {
                                 'pending' => 'warning',
                                 'paid' => 'success',
                                 'failed' => 'danger',
@@ -74,7 +74,7 @@ class ViewOrder extends ViewRecord
                         TextEntry::make('status')
                             ->label('Status Order')
                             ->badge()
-                            ->color(fn (string $state): string => match ($state) {
+                            ->color(fn(string $state): string => match ($state) {
                                 'new' => 'info',
                                 'processing' => 'warning',
                                 'shinpped' => 'info',
@@ -82,7 +82,7 @@ class ViewOrder extends ViewRecord
                                 'canceled' => 'danger',
                                 default => 'gray',
                             })
-                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                            ->formatStateUsing(fn(string $state): string => match ($state) {
                                 'new' => 'Baru',
                                 'processing' => 'Proses',
                                 'shinpped' => 'Dalam Perjalanan',
@@ -92,7 +92,7 @@ class ViewOrder extends ViewRecord
                             }),
                         TextEntry::make('shipping_status')
                             ->label('Metode Pengiriman')
-                            ->formatStateUsing(fn (string $state): string => match ($state) {
+                            ->formatStateUsing(fn(string $state): string => match ($state) {
                                 'jne' => 'JNE',
                                 'jnt' => 'JNT',
                                 'gosend' => 'Gosend',

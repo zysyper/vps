@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use App\Models\OrderItem;
+use App\Models\order;
+use App\Models\orderitem;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -104,7 +104,6 @@ class MyOrderController extends Controller
 
             return redirect()->route('my-orders')
                 ->with('success', 'Order has been cancelled successfully.');
-
         } catch (\Exception $e) {
             DB::rollback();
 
@@ -112,5 +111,4 @@ class MyOrderController extends Controller
                 ->with('error', 'Failed to cancel order. Please try again or contact support.');
         }
     }
-
 }

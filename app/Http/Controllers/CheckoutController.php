@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\helper\AddToCart;
 use App\Mail\OrderSuccess;
-use App\Models\Order;
+use App\Models\order;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;

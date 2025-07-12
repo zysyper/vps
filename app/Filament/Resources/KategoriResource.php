@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\KategoriResource\Pages;
 use App\Filament\Resources\KategoriResource\RelationManagers;
-use App\Models\Kategori;
+use App\Models\kategori;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Forms\Set;
@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use Illuminate\Support\Str;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\FileUpload;
 
 class KategoriResource extends Resource
 {
@@ -45,10 +46,19 @@ class KategoriResource extends Resource
                                     ->maxLength(255)
                                     ->unique(Kategori::class, 'slug', ignoreRecord: true),
                             ]),
-                        Forms\Components\FileUpload::make('image')
+                        FileUpload::make('image')
                             ->image()
-                            ->disk(config('filesystems.default'))
+                            ->disk('public') // Specify storage disk
                             ->directory('kategoris')
+                            ->visibility('public') // Make files publicly accessible
+                            ->acceptedFileTypes(['image/jpeg', 'image/png', 'image/gif', 'image/webp'])
+                            ->maxSize(2048) // 2MB max file size
+                            ->imageEditor() // Enable image editor
+                            ->imageEditorAspectRatios([
+                                '16:9',
+                                '4:3',
+                                '1:1',
+                            ])
                             ->required(),
                         Forms\Components\Toggle::make('is_active')
                             ->required()
@@ -65,7 +75,11 @@ class KategoriResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable(),
-                Tables\Columns\ImageColumn::make('image'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->disk('public')
+                    ->height(50)
+                    ->width(50)
+                    ->rounded(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')

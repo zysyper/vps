@@ -6,8 +6,10 @@ use Illuminate\Support\Facades\Cookie;
 use App\Models\produk;
 use Illuminate\Support\Facades\Cache;
 
-class AddToCart {
-    static public function addItemToCart($product_id) {
+class AddToCart
+{
+    static public function addItemToCart($product_id)
+    {
         $cart_items = self::getCartItemsFromCookie();
         $existing_item = null;
 
@@ -41,7 +43,8 @@ class AddToCart {
         return count($cart_items);
     }
 
-     static public function addItemToCartQty($product_id , $qty = 1) {
+    static public function addItemToCartQty($product_id, $qty = 1)
+    {
         $cart_items = self::getCartItemsFromCookie();
         $existing_item = null;
 
@@ -75,7 +78,8 @@ class AddToCart {
         return count($cart_items);
     }
 
-    static public function removeCartItem($product_id) {
+    static public function removeCartItem($product_id)
+    {
         $cart_items = self::getCartItemsFromCookie();
         foreach ($cart_items as $key => $item) {
             if ($item['produk_id'] == $product_id) {
@@ -87,17 +91,20 @@ class AddToCart {
     }
 
     // Add cart items to cookie
-    static public function addCartItemsToCookie($cart_items) {
+    static public function addCartItemsToCookie($cart_items)
+    {
         Cookie::queue('cart_items', json_encode($cart_items), 60 * 24 * 30);
     }
 
     // Clear cart items from cookie
-    static public function clearCartItems() {
+    static public function clearCartItems()
+    {
         Cookie::queue(Cookie::forget('cart_items'));
     }
 
     // Get all cart items from cookie
-    static public function getCartItemsFromCookie() {
+    static public function getCartItemsFromCookie()
+    {
         $cart_items = json_decode(Cookie::get('cart_items'), true);
         if (!$cart_items) {
             $cart_items = [];
@@ -106,7 +113,8 @@ class AddToCart {
     }
 
     // Increment item quantity
-    static public function incrementQuantityToCartItem($product_id) {
+    static public function incrementQuantityToCartItem($product_id)
+    {
         $cart_items = self::getCartItemsFromCookie();
         foreach ($cart_items as $key => $item) {
             if ($item['produk_id'] == $product_id) {
@@ -119,7 +127,8 @@ class AddToCart {
     }
 
     // Calculate grand total
-    static public function calculateGrandTotal($items) {
+    static public function calculateGrandTotal($items)
+    {
         return array_sum(array_column($items, 'total_amount'));
     }
 }

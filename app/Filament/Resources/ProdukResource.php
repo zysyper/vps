@@ -4,7 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ProdukResource\Pages;
 use App\Filament\Resources\ProdukResource\RelationManagers;
-use App\Models\Produk;
+use App\Models\produk;
 use Filament\Forms;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Group;
@@ -43,8 +43,8 @@ class ProdukResource extends Resource
                             ->required()
                             ->maxLength(255)
                             ->live(onBlur: true)
-                            ->afterStateUpdated(function (string $operation, $state, Set $set){
-                                if ($operation !== 'create'){
+                            ->afterStateUpdated(function (string $operation, $state, Set $set) {
+                                if ($operation !== 'create') {
                                     return;
                                 }
                                 $set('slug', Str::slug($state));
@@ -54,7 +54,7 @@ class ProdukResource extends Resource
                             ->disabled()
                             ->dehydrated()
                             ->maxLength(255)
-                            ->unique(produk::class , 'slug' , ignoreRecord: true),
+                            ->unique(produk::class, 'slug', ignoreRecord: true),
                         MarkdownEditor::make('deskripsi')
                             ->columnSpanFull()
                             ->fileAttachmentsDirectory('produks')
@@ -85,18 +85,18 @@ class ProdukResource extends Resource
 
                     Section::make('Status')->schema([
                         Toggle::make('in_stock')
-                        ->required()
-                        ->default(true),
+                            ->required()
+                            ->default(true),
                         Toggle::make('is_active')
-                        ->required()
-                        ->default(true),
+                            ->required()
+                            ->default(true),
                         Toggle::make('is_featured')
-                        ->label('Favorite')
-                        ->required()
-                        ->default(false),
+                            ->label('Favorite')
+                            ->required()
+                            ->default(false),
                         Toggle::make('on_sale')
-                        ->required()
-                        ->default(true),
+                            ->required()
+                            ->default(true),
                     ])
 
                 ])->columnSpan(1),
@@ -108,25 +108,25 @@ class ProdukResource extends Resource
         return $table
             ->columns([
                 TextColumn::make('name')
-                ->searchable(),
+                    ->searchable(),
                 TextColumn::make('kategori.name')
-                ->searchable(),
+                    ->searchable(),
                 ImageColumn::make('images'),
                 TextColumn::make('harga')
-                ->money('IDR')
-                ->sortable(),
+                    ->money('IDR')
+                    ->sortable(),
                 IconColumn::make('in_stock')
-                ->boolean()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('on_sale')
-                ->boolean()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_featured')
-                ->boolean()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 IconColumn::make('is_active')
-                ->boolean()
-                ->toggleable(isToggledHiddenByDefault: true),
+                    ->boolean()
+                    ->toggleable(isToggledHiddenByDefault: true),
 
 
 

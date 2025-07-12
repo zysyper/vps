@@ -38,16 +38,16 @@
                         class="flex flex-col mt-5 divide-y divide-gray-200 gap-x-0 divide-dashed md:flex-row md:items-center md:justify-end md:gap-x-7 md:mt-0 md:ps-7 md:divide-y-0 md:divide-solid dark:divide-gray-700">
 
                         <a class="py-3 font-medium {{ request()->is('/') ? 'text-blue-600 dark:text-blue-500 border-b-2 border-blue-600 md:border-b-2' : 'text-gray-500 hover:text-blue-600 hover:border-b-2 hover:border-blue-600' }} md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
-                            href="/" aria-current="page">Home</a>
+                            href="/" aria-current="page">Beranda</a>
 
                         <a class="py-3 font-medium {{ request()->is('categories') ? 'text-blue-600 dark:text-blue-500 border-b-2 border-blue-600 md:border-b-2' : 'text-gray-500 hover:text-blue-600 hover:border-b-2 hover:border-blue-600' }} md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                             href="/categories">
-                            Categories
+                            Kategori
                         </a>
 
                         <a class="py-3 font-medium {{ request()->is('products') ? 'text-blue-600 dark:text-blue-500 border-b-2 border-blue-600 md:border-b-2' : 'text-gray-500 hover:text-blue-600 hover:border-b-2 hover:border-blue-600' }} md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                             href="/products">
-                            Products
+                            Produk
                         </a>
 
                         <a class="flex items-center py-3 font-medium {{ request()->is('cart') ? 'text-blue-600 dark:text-blue-500 border-b-2 border-blue-600 md:border-b-2' : 'text-gray-500 hover:text-blue-600 hover:border-b-2 hover:border-blue-600' }} md:py-6 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
@@ -57,7 +57,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round"
                                     d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                             </svg>
-                            <span class="mr-1">Cart</span> <span
+                            <span class="mr-1">Keranjang</span> <span
                                 class="py-0.5 px-1.5 rounded-full text-xs font-medium bg-blue-50 border border-blue-200 text-blue-600">{{ $total_count }}</span>
                         </a>
 
@@ -72,7 +72,7 @@
                                         <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
                                         <circle cx="12" cy="7" r="4" />
                                     </svg>
-                                    Log in
+                                    Masuk
                                 </a>
                             </div>
 
@@ -100,7 +100,7 @@
                         {{-- Menu untuk semua user --}}
                         <a class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600"
                             href="{{ route('my-orders') }}">
-                            My Orders
+                            Order Saya
                         </a>
 
                         {{-- Menu khusus admin --}}
@@ -115,7 +115,7 @@
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                                 </svg>
-                                Admin Panel
+                                Dashboard Admin
                             </a>
                         @endif
 
@@ -126,7 +126,7 @@
                             @csrf
                             <a href="#" onclick="event.preventDefault(); this.closest('form').submit();"
                                 class="flex items-center gap-x-3.5 py-2 px-3 rounded-lg text-sm text-gray-800 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-gray-300 dark:focus:outline-none dark:focus:ring-1 dark:focus:ring-gray-600">
-                                Logout
+                                Keluar
                             </a>
                         </form>
 

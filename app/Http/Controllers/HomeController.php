@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Kategori;
-use App\Models\Produk;
+use App\Models\kategori;
+use App\Models\produk;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 
@@ -49,5 +49,4 @@ class HomeController extends Controller
             'kategoris' => $kategoris,
         ]);
     }
-
 }

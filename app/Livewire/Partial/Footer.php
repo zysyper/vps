@@ -10,7 +10,7 @@ class Footer extends Component
 
     public function render()
     {
-        $kategoris = kategori::where('is_active', 1 )->get();
+        $kategoris = kategori::where('is_active', 1)->get();
         return view('livewire.partial.footer', [
             'kategoris' => $kategoris,
         ]);
