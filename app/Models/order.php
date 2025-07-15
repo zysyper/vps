@@ -19,16 +19,45 @@ class order extends Model
         'currency',
         'original_name',
         'file_path',
+        'mime_type',
+        'payment_proof_path',
+        'payment_proof_name',
+        'payment_proof_mime',
         'notes',
         'catatan'
     ];
 
-    public function user() {
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 
-    public function items() {
+    public function items()
+    {
         return $this->hasMany(orderitem::class);
     }
 
+    public function getStatusInIndonesianAttribute()
+    {
+        $statusMap = [
+            'new' => 'Baru',
+            'processing' => 'Sedang Diproses',
+            'shipped' => 'Sedang Dikirim',
+            'delivered' => 'Diterima',
+            'canceled' => 'Dibatalkan',
+        ];
+
+        return $statusMap[$this->status] ?? 'Status Tidak Dikenal';
+    }
+
+    public function getPaymentStatusInIndonesianAttribute()
+    {
+        $paymentStatusMap = [
+            'pending' => 'Belum Dibayar',
+            'paid' => 'Sudah Dibayar',
+            'failed' => 'Gagal',
+        ];
+
+        return $paymentStatusMap[$this->payment_status] ?? 'Status Pembayaran Tidak Dikenal';
+    }
 }

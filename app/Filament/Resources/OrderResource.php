@@ -59,16 +59,15 @@ class OrderResource extends Resource
                             ->label('jenis pembayaran')
                             ->options([
                                 'qris' => 'Qris',
-                                'cod' => 'Ambil Sendiri'
                             ])
                             ->required(),
 
                         Select::make('payment_status')
                             ->label('Informasi Pembayaran')
                             ->options([
-                                'pending' => 'Pending',
-                                'paid' => 'Paid',
-                                'failed' => 'Failed'
+                                'pending' => 'Belum Dibayar',
+                                'paid' => 'Sudah Dibayar',
+                                'failed' => 'Gagal'
                             ])
                             ->default('pending')
                             ->required(),
@@ -82,7 +81,6 @@ class OrderResource extends Resource
                             ->options([
                                 'new' => 'Baru',
                                 'processing' => 'Proses',
-                                'shipped' => "Dalam Perjalanan",
                                 'delivered' => 'Diterima',
                                 'canceled' => 'Batal'
                             ])
@@ -91,18 +89,30 @@ class OrderResource extends Resource
                             ->colors([
                                 'new' => 'info',
                                 'processing' => 'warning',
-                                'shipped' => "info",
                                 'delivered' => 'success',
                                 'canceled' => 'danger'
                             ]),
 
                         FileUpload::make('file_path')
+                            ->label('Upload Dokumen')
                             ->disk('public')
                             ->directory('uploads/dokumen')
                             ->preserveFilenames()
                             ->downloadable()
                             ->previewable(false)
                             ->openable(),
+
+                        // TAMBAHKAN FIELD INI UNTUK BUKTI PEMBAYARAN
+                        FileUpload::make('payment_proof_path')
+                            ->label('Upload Bukti Pembayaran')
+                            ->disk('public')
+                            ->directory('uploads/payment_proof')
+                            ->preserveFilenames()
+                            ->downloadable()
+                            ->previewable(false)
+                            ->openable()
+                            ->acceptedFileTypes(['image/*', 'application/pdf'])
+                            ->maxSize(5120), // 5MB
 
                         Textarea::make('notes'),
                         Textarea::make('catatan')
@@ -212,25 +222,68 @@ class OrderResource extends Resource
                 Tables\Columns\SelectColumn::make('payment_status')
                     ->label('Status Pembayaran')
                     ->options([
-                        'pending' => 'Pending',
-                        'paid' => 'Paid',
-                        'failed' => 'Failed'
+                        'pending' => 'Belum Dibayar',
+                        'paid' => 'Sudah Dibayar',
+                        'failed' => 'Gagal'
                     ]),
                 Tables\Columns\SelectColumn::make('status')
                     ->label('Status Order')
                     ->options([
                         'new' => 'Baru',
                         'processing' => 'Proses',
-                        'shinpped' => "Dalam Perjalanan",
                         'delivered' => 'Diterima',
                         'canceled' => 'Batal'
                     ])
                     ->sortable(),
+
+                // PERBAIKAN UNTUK DOKUMEN
                 TextColumn::make('file_path')
-                    ->label('Download')
-                    ->url(fn($record) => Storage::disk('public')->url($record->file_path))
+                    ->label('Download Dokumen')
+                    ->formatStateUsing(function ($state) {
+                        if ($state && Storage::disk('public')->exists($state)) {
+                            return 'Unduh File';
+                        }
+                        return 'Tidak Ada File';
+                    })
+                    ->url(function ($record) {
+                        if ($record->file_path && Storage::disk('public')->exists($record->file_path)) {
+                            return Storage::disk('public')->url($record->file_path);
+                        }
+                        return null;
+                    })
                     ->openUrlInNewTab()
-                    ->formatStateUsing(fn() => 'Unduh File'),
+                    ->color(function ($record) {
+                        if ($record->file_path && Storage::disk('public')->exists($record->file_path)) {
+                            return 'primary';
+                        }
+                        return 'gray';
+                    }),
+
+                // PERBAIKAN UNTUK BUKTI PEMBAYARAN
+                TextColumn::make('payment_proof_path')
+                    ->label('Download Bukti Pembayaran')
+                    ->formatStateUsing(function ($state) {
+                        if ($state && Storage::disk('public')->exists($state)) {
+                            return 'Unduh Bukti';
+                        }
+                        return 'Tidak Ada Bukti';
+                    })
+                    ->url(function ($record) {
+                        if ($record->payment_proof_path && Storage::disk('public')->exists($record->payment_proof_path)) {
+                            // Gunakan route khusus jika storage link bermasalah
+                            return url('/storage/' . $record->payment_proof_path);
+                            // Atau gunakan route name: return route('payment.proof.download', basename($record->payment_proof_path));
+                        }
+                        return null;
+                    })
+                    ->openUrlInNewTab()
+                    ->color(function ($record) {
+                        if ($record->payment_proof_path && Storage::disk('public')->exists($record->payment_proof_path)) {
+                            return 'success';
+                        }
+                        return 'gray';
+                    }),
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Order Date')
                     ->dateTime()

@@ -14,15 +14,17 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->decimal('grand_total',10 ,2)->nullable();
+            $table->decimal('grand_total', 10, 2)->nullable();
             $table->string('payment_method')->nullable();
             $table->string('payment_status')->nullable();
             $table->string('phone');
-            $table->enum('status', ['new','processing','shinpped','delivered','canceled'])->default
-            ('new');
+            $table->enum('status', ['new', 'processing', 'shinpped', 'delivered', 'canceled'])->default('new');
             $table->string('original_name')->nullable();
             $table->string('file_path')->nullable();
             $table->string('mime_type')->nullable();
+            $table->string('payment_proof_path')->nullable()->after('payment_status');
+            $table->string('payment_proof_name')->nullable()->after('payment_proof_path');
+            $table->string('payment_proof_mime')->nullable()->after('payment_proof_name');
             $table->string('currency')->nullable();
             $table->text('notes')->nullable();
             $table->text('catatan')->nullable();
@@ -36,5 +38,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::dropIfExists('orders');
+        Schema::table('orders', function (Blueprint $table) {
+            $table->dropColumn(['payment_proof_path', 'payment_proof_name', 'payment_proof_mime']);
+        });
     }
 };

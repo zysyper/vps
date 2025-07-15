@@ -473,10 +473,6 @@
                             <span class="text-sm font-medium text-gray-900">Rp
                                 {{ number_format($grand_total, 0, ',', '.') }}</span>
                         </div>
-                        <div class="flex justify-between">
-                            <span class="text-sm text-gray-600">Pengiriman</span>
-                            <span class="text-sm font-medium text-gray-900">Ditentukan kemudian</span>
-                        </div>
                         <div class="flex justify-between pt-4 mt-4 border-t border-gray-200">
                             <span class="text-base font-medium text-gray-900">Total</span>
                             <span class="text-base font-bold text-indigo-600">Rp

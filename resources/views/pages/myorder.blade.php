@@ -64,14 +64,14 @@
                                     @elseif($order->status == 'shipped') bg-blue-100 text-blue-800
                                     @elseif($order->status == 'canceled') bg-red-100 text-red-800
                                     @else bg-gray-100 text-gray-800 @endif">
-                                        {{ ucfirst($order->status) }}
+                                        {{ ucfirst($order->getStatusInIndonesianAttribute()) }}
                                     </span>
                                     <span
                                         class="inline-flex items-center justify-center px-2 py-1 rounded-full text-xs font-medium whitespace-nowrap
                                     @if ($order->payment_status == 'paid') bg-green-100 text-green-800
                                     @elseif($order->payment_status == 'pending') bg-yellow-100 text-yellow-800
                                     @else bg-red-100 text-red-800 @endif">
-                                        {{ ucfirst($order->payment_status) }}
+                                        {{ ucfirst($order->getPaymentStatusInIndonesianAttribute()) }}
                                     </span>
                                 </div>
                             </div>
@@ -125,7 +125,7 @@
 
                                 <!-- Complete Payment Button -->
                                 @if ($order->status == 'new' && $order->payment_status == 'pending')
-                                    <form action="{{ route('orders.payment', $order->id) }}" method="POST"
+                                    <form action="{{ route('orders.payment', $order->id) }}" method="GET"
                                         class="sm:flex-1">
                                         @csrf
                                         <button type="submit"
@@ -142,7 +142,7 @@
                                 @endif
 
                                 <!-- Cancel Order Button -->
-                                @if ($order->status == 'new')
+                                @if ($order->payment_status == 'pending' && $order->status != 'canceled')
                                     <form action="{{ route('orders.cancel', $order->id) }}" method="POST"
                                         class="sm:flex-1"
                                         onsubmit="return confirm('Are you sure you want to cancel this order?')">

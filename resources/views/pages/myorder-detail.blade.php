@@ -106,7 +106,7 @@
                                         @elseif($order->status == 'delivered') bg-green-400
                                         @elseif($order->status == 'canceled') bg-red-400
                                         @else bg-gray-400 @endif"></span>
-                                        {{ ucfirst($order->status) }}
+                                        {{ ucfirst($order->getStatusInIndonesianAttribute()) }}
                                     </span>
                                 </div>
                                 <div class="text-3xl font-bold text-white">
@@ -468,7 +468,7 @@
                                             @if ($order->payment_status == 'paid') bg-green-400
                                             @elseif($order->payment_status == 'pending') bg-yellow-400
                                             @else bg-red-400 @endif"></span>
-                                            {{ ucfirst($order->payment_status) }}
+                                            {{ ucfirst($order->getPaymentStatusInIndonesianAttribute()) }}
                                         </span>
                                     </div>
                                 </div>
@@ -553,7 +553,7 @@
                         <!-- Action Buttons -->
                         <div class="space-y-4">
                             @if ($order->status == 'new' && $order->payment_status == 'pending')
-                                <form action="{{ route('orders.payment', $order->id) }}" method="POST" class="w-full">
+                                <form action="{{ route('orders.payment', $order->id) }}" method="GET" class="w-full">
                                     @csrf
                                     <button type="submit"
                                         class="inline-flex items-center justify-center w-full px-6 py-4 text-base font-semibold text-white transition-all duration-200 transform border border-transparent shadow-lg bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 hover:scale-105 hover:shadow-xl">

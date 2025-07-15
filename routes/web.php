@@ -19,7 +19,7 @@ Route::get('/categories', [HomeController::class, 'kategori'])->name('kategori')
 
 
 // Products by category route
-Route::get('/products?categories[0]={kategori_id}', function() {
+Route::get('/products?categories[0]={kategori_id}', function () {
     return view('pages.produk');
 })->name('kategori.produk');
 
@@ -50,16 +50,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::get('/myorder', [MyOrderController::class, 'index'])->name('my-orders');
     Route::get('/myorder/{order}', [MyOrderController::class, 'show'])->name('orders.show');
-    Route::post('/payment/{order}', [MyOrderController::class, 'payment'])->name('orders.payment');
+    Route::get('/payment/{order}', [MyOrderController::class, 'payment'])->name('orders.payment');
+    Route::post('/payment/{order}', [MyOrderController::class, 'submitPaymentProof'])->name('orders.payment.proof');
     Route::patch('/myorder/{order}/cancel', [MyOrderController::class, 'cancel'])->name('orders.cancel');
     Route::get('/cart', function () {
-    return view('pages.cart');
+        return view('pages.cart');
     });
-
-
 });
 
 
 // Add this route to your web.php file
-
-

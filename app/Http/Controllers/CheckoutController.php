@@ -105,38 +105,6 @@ class CheckoutController extends Controller
     public function success($orderId = null)
     {
 
-
-        $webhookUrl = env('DISCORD_WEBHOOK_URL');
-
-        if (!$webhookUrl) {
-            return;
-        }
-
-        Http::timeout(30)->post($webhookUrl, [
-            'content' => 'Test dari Laravel Job! 🎯',
-            'embeds' => [[
-                'title' => '📦 Order Masuk!',
-                'description' => 'Pesanan dari **John Doe** senilai **Rp 150.000**',
-                'color' => 65280,
-                'fields' => [
-                    [
-                        'name' => 'Produk',
-                        'value' => 'Kaos Polos',
-                        'inline' => true
-                    ],
-                    [
-                        'name' => 'Jumlah',
-                        'value' => '2 pcs',
-                        'inline' => true
-                    ]
-                ],
-                'footer' => [
-                    'text' => 'Laravel Store'
-                ],
-                'timestamp' => now()->toIso8601String()
-            ]]
-        ]);
-
         // Jika order ID tidak diberikan, ambil order terbaru dari user
         if ($orderId) {
             $order = Order::where('user_id', Auth::id())

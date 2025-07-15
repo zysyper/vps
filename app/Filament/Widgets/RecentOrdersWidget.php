@@ -49,9 +49,9 @@ class RecentOrdersWidget extends BaseWidget
                 Tables\Columns\SelectColumn::make('payment_status')
                     ->label('Status Bayar')
                     ->options([
-                        'pending' => 'Pending',
-                        'paid' => 'Paid',
-                        'failed' => 'Failed'
+                        'pending' => 'Belom Dibayar',
+                        'paid' => 'Sudah Dibayar',
+                        'failed' => 'Gagal'
                     ]),
 
                 Tables\Columns\SelectColumn::make('status')
@@ -59,7 +59,6 @@ class RecentOrdersWidget extends BaseWidget
                     ->options([
                         'new' => 'Baru',
                         'processing' => 'Proses',
-                        'shinpped' => "Dalam Perjalanan",
                         'delivered' => 'Diterima',
                         'canceled' => 'Batal'
                     ]),
@@ -69,6 +68,30 @@ class RecentOrdersWidget extends BaseWidget
                     ->url(fn($record) => Storage::disk('public')->url($record->file_path))
                     ->openUrlInNewTab()
                     ->formatStateUsing(fn() => 'Unduh File'),
+
+                TextColumn::make('payment_proof_path')
+                    ->label('Download Bukti Pembayaran')
+                    ->formatStateUsing(function ($state) {
+                        if ($state && Storage::disk('public')->exists($state)) {
+                            return 'Unduh Bukti';
+                        }
+                        return 'Tidak Ada Bukti';
+                    })
+                    ->url(function ($record) {
+                        if ($record->payment_proof_path && Storage::disk('public')->exists($record->payment_proof_path)) {
+                            // Gunakan route khusus jika storage link bermasalah
+                            return url('/storage/' . $record->payment_proof_path);
+                            // Atau gunakan route name: return route('payment.proof.download', basename($record->payment_proof_path));
+                        }
+                        return null;
+                    })
+                    ->openUrlInNewTab()
+                    ->color(function ($record) {
+                        if ($record->payment_proof_path && Storage::disk('public')->exists($record->payment_proof_path)) {
+                            return 'success';
+                        }
+                        return 'gray';
+                    }),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Tanggal')
