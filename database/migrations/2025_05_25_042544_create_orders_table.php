@@ -22,9 +22,9 @@ return new class extends Migration
             $table->string('original_name')->nullable();
             $table->string('file_path')->nullable();
             $table->string('mime_type')->nullable();
-            $table->string('payment_proof_path')->nullable()->after('payment_status');
-            $table->string('payment_proof_name')->nullable()->after('payment_proof_path');
-            $table->string('payment_proof_mime')->nullable()->after('payment_proof_name');
+            $table->string('payment_proof_path')->nullable();
+            $table->string('payment_proof_name')->nullable();
+            $table->string('payment_proof_mime')->nullable();
             $table->string('currency')->nullable();
             $table->text('notes')->nullable();
             $table->text('catatan')->nullable();
